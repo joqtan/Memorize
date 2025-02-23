@@ -9,12 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
+        
+        let cards: [String] = [
+            "🎃",
+            "👻",
+            "🦇",
+            "🧛‍♂️",
+            "🧌",
+            "🧟"
+        ]
 
         HStack {
-            CardView()
-            CardView()
-            CardView()
-            CardView()
+            ForEach( cards.shuffled(), id: \.self ) { emoji in
+                CardView(content: emoji)
+            }
         }
         .foregroundColor(.orange)
         .padding()
@@ -23,11 +31,13 @@ struct ContentView: View {
 
 struct CardView: View {
 
+    let content: String
+
     @State private var isFaceUp: Bool = true
 
     var body: some View {
-    
-        content
+
+        card
             .rotation3DEffect(
                 .degrees(isFaceUp ? 0 : 180),
                 axis: (x: 0, y: 1, z: 0)
@@ -43,9 +53,11 @@ struct CardView: View {
         ZStack {
             BaseCard()
                 .foregroundStyle(.white)
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(.orange, lineWidth: 3))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12).stroke(
+                        .orange, lineWidth: 3))
 
-            Text("🐲")
+            Text(content)
                 .font(.largeTitle)
         }
     }
@@ -55,7 +67,7 @@ struct CardView: View {
     }
 
     @ViewBuilder
-    var content: some View {
+    var card: some View {
         if isFaceUp {
             frontView
         } else {
